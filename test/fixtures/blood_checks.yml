@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  check_date: 2025-04-07
+  notes: MyString
+
+two:
+  check_date: 2025-04-07
+  notes: MyString

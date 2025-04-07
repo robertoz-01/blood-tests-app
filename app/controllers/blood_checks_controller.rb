@@ -1,0 +1,2 @@
+class BloodChecksController < ApplicationController
+end

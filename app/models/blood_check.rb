@@ -1,0 +1,2 @@
+class BloodCheck < ApplicationRecord
+end
