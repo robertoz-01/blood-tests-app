@@ -10,10 +10,17 @@
       <h1 class="text-center">Digital Blood Tests</h1>
     </div>
 
-    <div class="col-md-3 text-end">
-      <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-      <%= link_to 'Sign-up', new_session_path, class: "btn btn-primary" %>
-    </div>
+    <% if ! authenticated? %>
+      <div class="col-md-3 text-end">
+        <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+        <%= link_to 'Sign-up', new_session_path, class: "btn btn-primary" %>
+      </div>
+    <% else %>
+      <div class="col-md-3 text-end">
+        <%= Current.user.user_name %>
+        <%= button_to "Log out", session_path, method: :delete, class: "btn btn-outline-primary" %>
+      </div>
+    <% end %>
   </header>
 
   <div class="row">
