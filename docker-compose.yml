@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:17.4-alpine
+    ports:
+      - "5444:5432"
+    volumes:
+      - blood-tests-app-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: local_user
+      POSTGRES_PASSWORD: local_password
+      POSTGRES_DB: local_db
+volumes:
+  blood-tests-app-db:
