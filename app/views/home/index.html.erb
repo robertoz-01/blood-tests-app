@@ -1,3 +1,5 @@
+
+
 <div class="container">
   <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
     <div class="col-md-3 mb-2 mb-md-0">
@@ -9,7 +11,7 @@
     </div>
 
     <div class="col-md-3 text-end">
-      <%= link_to 'Login', new_session_path, class: "btn btn-outline-primary me-2" %>
+      <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
       <%= link_to 'Sign-up', new_session_path, class: "btn btn-primary" %>
     </div>
   </header>
@@ -23,3 +25,5 @@
   </div>
 
 </div>
+
+<%= render 'login_modal' %>

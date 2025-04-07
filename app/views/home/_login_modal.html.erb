@@ -1,0 +1,29 @@
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header p-5 pb-4 border-bottom-0">
+        <h1 class="fw-bold mb-0 fs-2">Login</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-5 pt-0">
+        <%= form_with url: session_path do |form| %>
+          <div class="form-floating mb-3">
+            <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Email address", class: "form-control rounded-3" %>
+            <label for="floatingInput">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Password", maxlength: 72, class: "form-control rounded-3" %>
+            <label for="floatingPassword">Password</label>
+          </div>
+          <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Login</button>
+          <hr class="my-4">
+          <h3 class="fs-5 fw-bold mb-3">Or</h3>
+          <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
+            Sign up...
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
