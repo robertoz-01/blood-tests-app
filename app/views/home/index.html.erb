@@ -1,36 +1,7 @@
-
-
-<div class="container">
-  <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <div class="col-md-3 mb-2 mb-md-0">
-      <a href="/" class="nav-link px-2 link-secondary">Home</a>
-    </div>
-
-    <div class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <h1 class="text-center">Digital Blood Tests</h1>
-    </div>
-
-    <% if ! authenticated? %>
-      <div class="col-md-3 text-end">
-        <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-        <%= link_to 'Sign-up', new_session_path, class: "btn btn-primary" %>
-      </div>
-    <% else %>
-      <div class="col-md-3 text-end">
-        <%= Current.user.user_name %>
-        <%= button_to "Log out", session_path, method: :delete, class: "btn btn-outline-primary" %>
-      </div>
-    <% end %>
-  </header>
-
-  <div class="row">
-    <div class="col-md-6">
-      <h3>What is this?</h3>
-      <p>This is a website that allows you to create and manage blood tests.</p>
-      <p> You can upload a tests, compare them, see how any value change over time.</p>
-    </div>
+<div class="row">
+  <div class="col-md-10 mx-auto">
+    <h3>What is this?</h3>
+    <p>This is a website that allows you to create and manage blood tests.</p>
+    <p> You can upload a tests, compare them, see how any value change over time.</p>
   </div>
-
 </div>
-
-<%= render 'login_modal' %>
