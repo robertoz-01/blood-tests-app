@@ -15,6 +15,11 @@ if (element !== null) {
                 errors: []
             }
         },
+        computed: {
+            isNew() {
+                return this.bloodCheck.identifier === null
+            }
+        },
         methods: {
             onSubmit() {
                 const postData = {
@@ -24,8 +29,10 @@ if (element !== null) {
                     }
                 };
 
-                fetch("/blood_checks", {
-                    method: "POST",
+                const fetchUrl = this.isNew ? "/blood_checks" : `/blood_checks/${this.bloodCheck.identifier}`;
+                const fetchMethod = this.isNew ? "POST" : "PATCH";
+                fetch(fetchUrl, {
+                    method: fetchMethod,
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -35,6 +42,7 @@ if (element !== null) {
                     .then((response) => {
                         if (response.ok) {
                             response.json().then((user_data) => {
+                                this.bloodCheck.identifier = user_data.identifier;
                                 const toastLiveExample = document.getElementById('successfulCreationToast')
                                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                                 toastBootstrap.show()

@@ -17,4 +17,14 @@ class BloodChecksController < ApplicationController
       render json: { errors: @blood_check.errors }, status: :unprocessable_entity
     end
   end
+
+  def update
+    @blood_check = BloodCheck.find_by!(identifier: params[:id])
+
+    if @blood_check.update(params.require(:blood_check).permit(:check_date, :notes))
+      render json: { identifier: @blood_check.identifier }, status: :ok
+    else
+      render json: { errors: @blood_check.errors }, status: :unprocessable_entity
+    end
+  end
 end
