@@ -1,0 +1,56 @@
+<script>
+    const pageBloodCheck = <%= raw(@blood_check.to_json(only: [:identifier, :check_date, :notes])) %>;
+</script>
+
+<div class="row" id="blood-check-new">
+  <div class="col-md-10 mx-auto">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="successfulCreationToast" class="toast bg-info" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Info</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Blood check has been created!
+        </div>
+      </div>
+    </div>
+
+    <%= link_to 'Back to list', blood_checks_path, class: 'float-end btn btn-sm btn-outline-primary' %>
+    <h3 class="mb-4">New blood test</h3>
+
+    <%= form_with(model: @blood_check, local: true, html: { class: "form", "@submit.prevent": "onSubmit" }) do |form| %>
+      <div class="row g-3 align-items-center mb-2">
+        <div class="col-auto">
+          <%= form.label :check_date, class: "col-form-label" %>
+        </div>
+        <div class="col-auto">
+          <%= form.date_field :check_date, required: true, class: "form-control", "v-model": "bloodCheck.check_date" %>
+        </div>
+        <div class="col-auto">
+          <span class="form-text">
+
+          </span>
+        </div>
+      </div>
+
+      <div class="row g-3 align-items-center mb-2">
+        <div class="col-auto">
+          <%= form.label :notes, class: "col-form-label" %>
+        </div>
+        <div class="col">
+          <%= form.text_field :notes, required: true, class: "form-control", "v-model": "bloodCheck.notes" %>
+        </div>
+        <div class="col-auto">
+          <span class="form-text">
+
+          </span>
+        </div>
+      </div>
+
+      <div class="actions mt-3">
+        <%= form.submit "Create Blood Check", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

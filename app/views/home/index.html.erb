@@ -5,3 +5,15 @@
     <p> You can upload a tests, compare them, see how any value change over time.</p>
   </div>
 </div>
+
+<% if authenticated? %>
+  <div class="row">
+    <div class="col-md-10 mx-auto text-center mt-5">
+      <p>Go to your blood checks</p>
+      <%= link_to "Blood check list", blood_checks_path, class: "btn btn-primary" %>
+      <div class="my-5">Or</div>
+      <p>Create a new blood check</p>
+      <%= link_to "New blood check", new_blood_check_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

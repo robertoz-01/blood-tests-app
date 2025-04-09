@@ -11,6 +11,7 @@ if (element !== null) {
     });
 
     const app = Vue.createApp({
+        name: "BloodChecksList-App",
         data() {
             return {bloodChecks: bloodChecks}
         },
