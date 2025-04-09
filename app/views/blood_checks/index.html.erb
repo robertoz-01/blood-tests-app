@@ -1,7 +1,17 @@
-<div class="row">
+<script>
+    const pageBloodChecks = <%= raw(@blood_checks.map do |c|
+      {
+        identifier: c.identifier,
+        check_date: c.check_date.iso8601,
+        notes: c.notes
+      }
+    end.to_json) %>;
+</script>
+
+<div class="row" id="blood-checks-list">
   <div class="col-md-10 mx-auto">
     <h3>Your blood tests</h3>
-    <table class="table">
+    <table class="table" id="blood-checks-table">
       <thead>
       <tr>
         <th scope="col">Date</th>
@@ -10,23 +20,29 @@
       </tr>
       </thead>
       <tbody>
-      <% @blood_checks.each do |blood_check| %>
-        <tr>
-          <td><%= blood_check.check_date %></td>
-          <td><%= blood_check.notes %></td>
-          <td>
-            <%= link_to 'View', blood_check_path(blood_check.identifier) %>
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="check-<%= blood_check.identifier %>" checked>
-              <label class="form-check-label" for="check-<%= blood_check.identifier %>">
-                Compare
-              </label>
-            </div>
-          </td>
-        </tr>
-      <% end %>
+            <tr v-for="bloodCheck in bloodChecks" :key="bloodCheck.identifier">
+              <td>{{ bloodCheck.check_date }}</td>
+              <td>{{ bloodCheck.notes }}</td>
+              <td>
+                <a :href="'/blood_checks/' + bloodCheck.identifier" class="btn btn-primary">View</a>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" v-model="bloodCheck.comparisonSelected" :id="'checkbox-' + bloodCheck.identifier">
+                  <label class="form-check-label" :for="'checkbox-' + bloodCheck.identifier">
+                    Compare
+                  </label>
+                </div>
+              </td>
+            </tr>
       </tbody>
     </table>
-
+    <div v-if="selectedBloodChecks.length > 1">
+      <a :href="'/blood_checks/compare/' + selectedBloodChecks.map(c => c.identifier).join(',')" class="btn btn-primary">Go to Compare...</a>
+      <div class="small">Compare the {{ selectedBloodChecks.length }} selected blood checks</div>
+    </div>
+    <div v-else>
+      
+      <a href="#" class="btn btn-primary disabled">Go to Compare...</a>
+      <div class="text-warning small">Select at least two blood checks to compare.</div>
+    </div>
   </div>
 </div>
