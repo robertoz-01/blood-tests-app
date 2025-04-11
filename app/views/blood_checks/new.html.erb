@@ -1,5 +1,6 @@
 <script>
     const pageBloodCheck = <%= raw(@blood_check.to_json(only: [:identifier, :check_date, :notes])) %>;
+    const pageEntries = <%= raw(@blood_check.user_entries.to_json) %>;
 </script>
 
 <div class="row" id="blood-check-new">
@@ -46,6 +47,9 @@
 
           </span>
         </div>
+      </div>
+      <div class="actions mt-3 text-center">
+        <button type=submit class="btn btn-outline-primary">Load all the results from PDF...</button>
       </div>
 
       <table class="table" id="blood-checks-table" v-if="entries.length > 0">

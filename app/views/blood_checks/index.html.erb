@@ -25,7 +25,7 @@
               <td>{{ bloodCheck.check_date }}</td>
               <td>{{ bloodCheck.notes }}</td>
               <td>
-                <a :href="'/blood_checks/' + bloodCheck.identifier" class="btn btn-primary">View</a>
+                <a :href="'/blood_checks/' + bloodCheck.identifier + '/edit'" class="btn btn-primary">View</a>
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" v-model="bloodCheck.comparisonSelected" :id="'checkbox-' + bloodCheck.identifier">
                   <label class="form-check-label" :for="'checkbox-' + bloodCheck.identifier">

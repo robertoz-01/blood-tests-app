@@ -5,6 +5,7 @@ const element = document.querySelector(pageRoot)
 
 if (element !== null) {
     let bloodCheck = pageBloodCheck; // Coming from the page inline javascript
+    let entries = pageEntries; // Coming from the page inline javascript
 
     const app = Vue.createApp({
         name: "BloodCheckNew-App",
@@ -17,7 +18,7 @@ if (element !== null) {
                 //     messages: list[{field: str, level: "info"|"warning", text: str}]
                 //   }
                 // ]
-                entries: [],
+                entries: entries,
                 saveFailed: false,
                 errors: []
             }
