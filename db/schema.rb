@@ -35,6 +35,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_11_072859) do
   end
 
   create_table "check_entries", force: :cascade do |t|
+    t.uuid "identifier", default: -> { "gen_random_uuid()" }, null: false
     t.bigint "blood_check_id", null: false
     t.bigint "analysis_id", null: false
     t.float "value", null: false
