@@ -10,7 +10,14 @@ if (element !== null) {
         name: "BloodCheckNew-App",
         data() {
             return {
+                // bloodCheck: {identifier: str, check_date: str, notes: str}
                 bloodCheck: bloodCheck,
+                // entries: list[
+                //   {identifier: str, name: str, value: number, unit: str, reference: str,
+                //     messages: list[{field: str, level: "info"|"warning", text: str}]
+                //   }
+                // ]
+                entries: [],
                 saveFailed: false,
                 errors: []
             }
@@ -26,7 +33,8 @@ if (element !== null) {
                     blood_check: {
                         check_date: this.bloodCheck.check_date,
                         notes: this.bloodCheck.notes,
-                    }
+                    },
+                    entries: this.entries,
                 };
 
                 const fetchUrl = this.isNew ? "/blood_checks" : `/blood_checks/${this.bloodCheck.identifier}`;
@@ -42,7 +50,7 @@ if (element !== null) {
                     .then((response) => {
                         if (response.ok) {
                             response.json().then((user_data) => {
-                                this.bloodCheck.identifier = user_data.identifier;
+                                this.bloodCheck = user_data.blood_check;
                                 const toastLiveExample = document.getElementById('successfulCreationToast')
                                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                                 toastBootstrap.show()
@@ -59,6 +67,12 @@ if (element !== null) {
                         console.error(err);
                         throw err;
                     });
+            },
+            addEntry() {
+                this.entries.push({identifier: crypto.randomUUID(), name: null, value: null, unit: null, reference: null})
+            },
+            deleteEntry(entry) {
+                this.entries.splice(this.entries.indexOf(entry), 1)
             }
         }
     })

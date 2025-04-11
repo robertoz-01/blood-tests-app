@@ -12,7 +12,11 @@ class BloodChecksController < ApplicationController
     @blood_check.user_id = Current.user.id
 
     if @blood_check.save
-      render json: { identifier: @blood_check.identifier }, status: :created
+      render json: {
+        blood_check: { identifier: @blood_check.identifier,
+                       check_date: @blood_check.check_date,
+                       notes: @blood_check.notes }
+      }, status: :created
     else
       render json: { errors: @blood_check.errors }, status: :unprocessable_entity
     end
