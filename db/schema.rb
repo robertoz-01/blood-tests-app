@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_07_190330) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_11_072859) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "analyses", force: :cascade do |t|
+    t.string "default_name", null: false
+    t.string "other_names", default: [], array: true
+    t.string "unit", null: false
+    t.float "reference_lower"
+    t.float "reference_upper"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "blood_checks", force: :cascade do |t|
     t.uuid "identifier", default: -> { "gen_random_uuid()" }, null: false
@@ -22,6 +32,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_190330) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_blood_checks_on_user_id"
+  end
+
+  create_table "check_entries", force: :cascade do |t|
+    t.bigint "blood_check_id", null: false
+    t.bigint "analysis_id", null: false
+    t.float "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["analysis_id"], name: "index_check_entries_on_analysis_id"
+    t.index ["blood_check_id"], name: "index_check_entries_on_blood_check_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -43,5 +63,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_190330) do
   end
 
   add_foreign_key "blood_checks", "users"
+  add_foreign_key "check_entries", "analyses"
+  add_foreign_key "check_entries", "blood_checks"
   add_foreign_key "sessions", "users"
 end
