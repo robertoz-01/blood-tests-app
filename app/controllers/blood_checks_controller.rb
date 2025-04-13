@@ -48,7 +48,7 @@ class BloodChecksController < ApplicationController
   private
 
   def user_entries_from_params
-    params.expect(entries: [[:identifier, :name, :value, :unit, :reference]])
+    params.expect(entries: [[:identifier, :name, :value, :unit, :reference_lower, :reference_upper]])
       .map { |entry_data| UserEntry.new(entry_data) }
   end
 end

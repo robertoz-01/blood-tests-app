@@ -14,7 +14,7 @@ if (element !== null) {
                 // bloodCheck: {identifier: str, check_date: str, notes: str}
                 bloodCheck: bloodCheck,
                 // entries: list[
-                //   {identifier: str, name: str, value: number, unit: str, reference: str,
+                //   {identifier: str, name: str, value: number, unit: str, reference_lower: float, reference_upper: float
                 //     messages: list[{field: str, level: "info"|"warning", text: str}]
                 //   }
                 // ]

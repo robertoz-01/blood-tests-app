@@ -8,7 +8,8 @@ class BloodCheck < ApplicationRecord
                     name: entry.analysis.default_name,
                     value: entry.value,
                     unit: entry.analysis.unit,
-                    reference: "#{entry.analysis.reference_lower}-#{entry.analysis.reference_upper}"
+                    reference_lower: entry.analysis.reference_lower,
+                    reference_upper: entry.analysis.reference_upper
       )
     end
   end
