@@ -45,10 +45,17 @@ class BloodChecksController < ApplicationController
     end
   end
 
+  def load_from_pdf
+    user_entries = ExtractorService.entries_from_pdf(params.expect(:pdf_file).tempfile)
+    render json: {
+      user_entries: user_entries
+    }, status: :created
+  end
+
   private
 
   def user_entries_from_params
     params.expect(entries: [[:identifier, :name, :value, :unit, :reference_lower, :reference_upper]])
-      .map { |entry_data| UserEntry.new(entry_data) }
+          .map { |entry_data| UserEntry.new(entry_data) }
   end
 end

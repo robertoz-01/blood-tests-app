@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :blood_checks
+  resources :blood_checks do
+    collection do
+      post :load_from_pdf
+    end
+  end
   root "home#index"
   resource :session
   resources :passwords, param: :token

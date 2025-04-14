@@ -70,10 +70,57 @@ if (element !== null) {
                     });
             },
             addEntry() {
-                this.entries.push({identifier: crypto.randomUUID(), name: null, value: null, unit: null, reference: null})
+                this.entries.push({
+                    identifier: crypto.randomUUID(),
+                    name: null,
+                    value: null,
+                    unit: null,
+                    reference: null
+                })
             },
             deleteEntry(entry) {
                 this.entries.splice(this.entries.indexOf(entry), 1)
+            },
+            loadFromPdf() {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = 'application/pdf';
+
+                fileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+
+                    if (file) {
+                        const formData = new FormData();
+                        formData.append('pdf_file', file);
+
+                        fetch(`/blood_checks/load_from_pdf`, {
+                            method: "POST",
+                            headers: {
+                                'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            },
+                            body: formData,
+                        })
+                            .then((response) => {
+                                if (response.ok) {
+                                    response.json().then((data) => {
+                                        this.entries = data.user_entries;
+                                        const toastLiveExample = document.getElementById('successfulLoadToast');
+                                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+                                        toastBootstrap.show();
+                                    }).catch((err) => {
+                                        console.error("Failed to parse response JSON:", err);
+                                    });
+                                } else {
+                                    console.error(`The API returned an error: ${response.status}`);
+                                }
+                            })
+                            .catch((err) => {
+                                console.error("Error during fetch:", err);
+                            });
+                    }
+                });
+
+                fileInput.click();
             }
         }
     })

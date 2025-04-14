@@ -37,8 +37,12 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
+# Use them for the css
 gem "dartsass-rails"
 gem "bootstrap", "~> 5.3.3"
+
+# Use it to make http requests to other services
+gem "httparty", "~> 0.23.1"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

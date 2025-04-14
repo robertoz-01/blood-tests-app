@@ -17,6 +17,18 @@
       </div>
     </div>
 
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="successfulLoadToast" class="toast bg-info" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Info</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Results have been loaded from PDF!
+        </div>
+      </div>
+    </div>
+
     <%= link_to 'Back to list', blood_checks_path, class: 'float-end btn btn-sm btn-outline-primary' %>
     <h3 class="mb-4">New blood test</h3>
 
@@ -49,7 +61,7 @@
         </div>
       </div>
       <div class="actions mt-3 text-center">
-        <button type=submit class="btn btn-outline-primary">Load all the results from PDF...</button>
+        <button @click="loadFromPdf" class="btn btn-outline-primary">Load all the results from PDF...</button>
       </div>
 
       <table class="table" id="blood-checks-table" v-if="entries.length > 0">
