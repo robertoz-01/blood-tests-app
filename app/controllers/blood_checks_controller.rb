@@ -13,7 +13,7 @@ class BloodChecksController < ApplicationController
   end
 
   def create
-    @blood_check = BloodCheck.new(params.expect(blood_check: [:check_date, :notes]))
+    @blood_check = BloodCheck.new(params.expect(blood_check: [ :check_date, :notes ]))
     @blood_check.user_id = Current.user.id
 
     if @blood_check.save
@@ -52,10 +52,21 @@ class BloodChecksController < ApplicationController
     }, status: :created
   end
 
+  def compare
+    identifiers = params.require(:identifiers).split(",")
+    @blood_checks = BloodCheck.where(identifier: identifiers).includes(:check_entries)
+    analyses_ids = Set.new
+    @blood_checks.each do |blood_check|
+      blood_check.check_entries.each { |entry| analyses_ids << entry.analysis_id }
+    end
+
+    @analyses = Analysis.includes(:check_entries).where(check_entries: { analysis_id: analyses_ids })
+  end
+
   private
 
   def user_entries_from_params
-    params.expect(entries: [[:identifier, :name, :value, :unit, :reference_lower, :reference_upper]])
+    params.expect(entries: [ [ :identifier, :name, :value, :unit, :reference_lower, :reference_upper ] ])
           .map { |entry_data| UserEntry.new(entry_data) }
   end
 end

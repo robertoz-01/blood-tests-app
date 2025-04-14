@@ -1,0 +1,39 @@
+<script>
+    const pageBloodChecksValues = <%= raw(@blood_checks.map do |check|
+      ViewModels::BloodCheckValues.from_blood_check(check)
+    end.to_json) %>;
+    const pageAnalyses = <%= raw(@analyses.map do |analysis|
+      ViewModels::Analysis.from_analysis_model(analysis)
+    end.to_json) %>
+</script>
+
+<div class="row" id="blood-checks-comparison">
+  <div class="col-md-10 mx-auto">
+    <%= link_to 'Back to list', blood_checks_path, class: 'float-end btn btn-sm btn-outline-primary' %>
+    <h3>Blood tests comparison</h3>
+    <table class="table" id="blood-checks-table">
+      <thead>
+      <tr>
+        <th scope="col">Analysis</th>
+        <th scope="col" v-for="analysisDate in analysesDates">{{ analysisDate }}</th>
+        <th scope="col">Graph</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="row in analysesRows" :key="row.id">
+        <td>
+          {{ row.name }}
+          <span class="small"> ({{row.details}})</span>
+        </td>
+        <td v-for="value in row.values">
+            {{ value }}
+        </td>
+        <td>
+          <apexchart width="200" height="200" type="line" :options="row.chartOptions" :series="row.series"></apexchart>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

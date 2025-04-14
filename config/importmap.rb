@@ -10,5 +10,6 @@ if Rails.env.production?
 else
   pin "vue", to: "https://unpkg.com/vue@3.5.13/dist/vue.esm-browser.js"
 end
+pin "vue3-apexcharts", to: "https://cdn.jsdelivr.net/npm/vue3-apexcharts@1.8.0/+esm", preload: true
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin_all_from "app/javascript/vue_components", under: "vue_components"
