@@ -10,13 +10,13 @@
 <div class="row" id="blood-checks-comparison">
   <div class="col-md-10 mx-auto">
     <%= link_to 'Back to list', blood_checks_path, class: 'float-end btn btn-sm btn-outline-primary' %>
-    <h3>Blood tests comparison</h3>
+    <h3 class="mb-4">Blood tests comparison</h3>
     <table class="table" id="blood-checks-table">
       <thead>
       <tr>
-        <th scope="col">Analysis</th>
-        <th scope="col" v-for="analysisDate in analysesDates">{{ analysisDate }}</th>
-        <th scope="col">Graph</th>
+        <th scope="col" class="text-center">Analysis</th>
+        <th scope="col" v-for="analysisDate in analysesDates" class="text-center">{{ analysisDate }}</th>
+        <th scope="col" class="text-center">Graph</th>
       </tr>
       </thead>
       <tbody>
@@ -26,7 +26,10 @@
           <span class="small"> ({{row.details}})</span>
         </td>
         <td v-for="value in row.values">
-            {{ value }}
+            {{ value.value }}
+          <span class="text-warning small" title="Warning!" v-if="value.out_of_range">
+            &#9888;
+          </span>
         </td>
         <td>
           <apexchart width="200" height="200" type="line" :options="row.chartOptions" :series="row.series"></apexchart>

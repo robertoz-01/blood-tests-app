@@ -3,7 +3,6 @@ import * as Vue from "vue"
 import VueApexCharts from "vue3-apexcharts"
 
 
-
 const listRoot = "#blood-checks-comparison"
 const element = document.querySelector(listRoot)
 
@@ -31,16 +30,22 @@ if (element !== null) {
                     let y_max = null;
                     if (analysis.reference_lower !== null && analysis.reference_upper !== null) {
                         const rangeSize = analysis.reference_upper - analysis.reference_lower;
-                        y_min = Math.min(analysis.reference_lower, ...values) - rangeSize * 0.2;
+                        y_min = Math.max(0, Math.min(analysis.reference_lower, ...values) - rangeSize * 0.2);
                         y_max = Math.max(analysis.reference_upper, ...values) + rangeSize * 0.2;
                     }
-                    
-                    
+
+
                     return {
                         id: analysis.id,
                         name: analysis.name,
                         details: `${analysis.reference_lower} - ${analysis.reference_upper} ${analysis.unit}`,
-                        values: values,
+                        values: values.map(value => {
+                            return {
+                                value: value,
+                                out_of_range: (analysis.reference_lower !== null && value <= analysis.reference_lower) ||
+                                    (analysis.reference_upper !== null && value >= analysis.reference_upper)
+                            }
+                        }),
                         chartOptions: {
                             chart: {
                                 id: `chart-${analysis.id}`,
