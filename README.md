@@ -3,8 +3,7 @@
 This web application allows users to upload blood test results, either as PDF files or by manually entering values, and
 visualize trends over time through interactive graphs.
 
-It integrates with the [Blood-Tests-Extractor service](https://github.com/robertoz-01/blood-tests-extractor) to extract
-values from PDF files.
+Below is an example of the comparison page displaying graphs for some blood test results:
 
 <kbd> ![Screenshot of the page showing a blood test comparison](docs/screenshot_comparison.png) </kbd>
 
