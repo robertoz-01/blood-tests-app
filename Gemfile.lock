@@ -120,6 +120,11 @@ GEM
     et-orbi (1.2.11)
       tzinfo
     execjs (2.10.0)
+    factory_bot (6.5.1)
+      activesupport (>= 6.1.0)
+    factory_bot_rails (6.4.4)
+      factory_bot (~> 6.5)
+      railties (>= 5.0.0)
     foreman (0.88.1)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
@@ -421,6 +426,8 @@ DEPENDENCIES
   capybara
   dartsass-rails
   debug
+  factory_bot (~> 6.5)
+  factory_bot_rails (~> 6.4)
   foreman
   httparty (~> 0.23.1)
   importmap-rails
