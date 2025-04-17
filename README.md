@@ -58,6 +58,15 @@ or [rbenv](https://github.com/rbenv/rbenv).
     bin/dev
     ```
 
+### Test
+
+This project uses [RSpec](https://rspec.info/) for testing. To run the test suite, use the following command:
+
+```shell
+bundle exec rspec
+```
+
+
 ### External Service
 
 To enable PDF uploads, ensure the [Blood-Tests-Extractor service](https://github.com/robertoz-01/blood-tests-extractor)

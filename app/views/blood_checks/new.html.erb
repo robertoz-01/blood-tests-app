@@ -1,6 +1,6 @@
 <script>
     const pageBloodCheck = <%= raw(@blood_check.to_json(only: [:identifier, :check_date, :notes])) %>;
-    const pageEntries = <%= raw(@blood_check.user_entries.to_json) %>;
+    const pageEntries = <%= raw(ViewModels::UserEntry.from_blood_check(@blood_check).to_json) %>;
 </script>
 
 <div class="row" id="blood-check-new">

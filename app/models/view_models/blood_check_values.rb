@@ -11,7 +11,7 @@ module ViewModels
       new(
         identifier: blood_check.identifier,
         check_date: blood_check.check_date.to_s,
-        values: blood_check.check_entries.map { |entry| [entry.analysis_id, entry.value] }.to_h
+        values: blood_check.check_entries.map { |entry| [ entry.analysis_id, entry.value ] }.to_h
       )
     end
   end

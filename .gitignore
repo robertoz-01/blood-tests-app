@@ -35,3 +35,5 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+/coverage/.last_run.json
+/coverage/.resultset.json.lock
