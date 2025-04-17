@@ -4,10 +4,10 @@ class CheckEntry < ApplicationRecord
 
   def self.insert_user_entries(user_entries, blood_check)
     existing_entries = CheckEntry.where(identifier: user_entries.map(&:identifier))
-    existing_entries_by_identifiers = existing_entries.map { |e| [e.identifier, e] }.to_h
+    existing_entries_by_identifiers = existing_entries.map { |e| [ e.identifier, e ] }.to_h
 
     existing_analyses = Analysis.all.to_a
-    existing_analyses_by_name = existing_analyses.map { |a| [a.default_name, a] }.to_h
+    existing_analyses_by_name = existing_analyses.map { |a| [ a.default_name, a ] }.to_h
 
     user_entries.each do |entry|
       unless existing_analyses_by_name.has_key?(entry.name)
