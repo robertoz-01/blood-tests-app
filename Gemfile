@@ -37,7 +37,7 @@ gem "thruster", require: false
 
 # Use them for the css
 gem "dartsass-rails"
-gem "bootstrap", "~> 5.3.3"
+gem "bootstrap", "~> 5.3.5"
 
 # Use it to make http requests to other services
 gem "httparty", "~> 0.23.1"
