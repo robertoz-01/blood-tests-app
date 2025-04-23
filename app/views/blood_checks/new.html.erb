@@ -30,7 +30,13 @@
     </div>
 
     <%= link_to 'Back to list', blood_checks_path, class: 'float-end btn btn-sm btn-outline-primary' %>
-    <h3 class="mb-4">New blood test</h3>
+    <h3 class="mb-4">
+      <% if @blood_check.persisted? %>
+        Your blood test
+      <% else %>
+        New blood test
+      <% end %>
+    </h3>
 
     <%= form_with(model: @blood_check, local: true, html: { class: "form", "@submit.prevent": "onSubmit" }) do |form| %>
       <div class="row g-3 align-items-center mb-2">

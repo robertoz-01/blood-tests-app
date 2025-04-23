@@ -8,7 +8,7 @@ class BloodChecksController < ApplicationController
   end
 
   def edit
-    @blood_check = BloodCheck.find_by!(identifier: params[:id])
+    @blood_check = blood_check_by_id
     render :new
   end
 
@@ -30,7 +30,7 @@ class BloodChecksController < ApplicationController
   end
 
   def update
-    @blood_check = BloodCheck.find_by!(identifier: params[:id])
+    @blood_check = blood_check_by_id
 
     if @blood_check.update(params.require(:blood_check).permit(:check_date, :notes))
       user_entries = CheckEntry.insert_user_entries(user_entries_from_params, @blood_check)
@@ -64,6 +64,10 @@ class BloodChecksController < ApplicationController
   end
 
   private
+
+  def blood_check_by_id
+    Current.user.blood_checks.find_by!(identifier: params[:id])
+  end
 
   def user_entries_from_params
     params.expect(entries: [ [ :identifier, :name, :value, :unit, :reference_lower, :reference_upper ] ])
