@@ -29,9 +29,35 @@ RSpec.describe BloodChecksController, type: :controller do
 
       # Then
       expect(response).to be_successful
-      expect(response.body).to match(/Your blood tests/)
+      expect(html_body.at_css('h3').text).to match(/Your blood tests/)
       expect(response.body).to match(/2023-01-01/)
       expect(response.body).not_to match(/2023-05-20/)
+    end
+  end
+
+  describe "GET #new" do
+    context "when not logged in" do
+      it "redirects" do
+        # When
+        get :new
+
+        # Then
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+
+    context "when user is logged in" do
+      it "shows the blood check creation form" do
+        # When
+        sign_in user
+        get :new
+
+        # Then
+        expect(response).to be_successful
+        expect(html_body.at_css('h3').text).to match(/New blood test/)
+        expect(html_body).to have_selector('input#blood_check_notes')
+        expect(html_body).to have_selector("form table")
+      end
     end
   end
 
@@ -75,6 +101,7 @@ RSpec.describe BloodChecksController, type: :controller do
         get :edit, params: { id: blood_check.identifier }
 
         # Then
+        expect(response).to be_successful
         expect(html_body.at_css('h3').text).to match(/Your blood test/)
         expect(html_body.at_css('input#blood_check_notes')['value']).to eq("Some important notes")
         expect(html_body).to have_selector("form table")
