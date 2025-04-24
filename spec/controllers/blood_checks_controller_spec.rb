@@ -152,15 +152,15 @@ RSpec.describe BloodChecksController, type: :controller do
                                                     }
                                                   )
           expect(json_response["entries"]).to include(
-                                                     {
-                                                       "identifier" => be_present,
-                                                       "name" => "Hemoglobin",
-                                                       "value" => 14.5,
-                                                       "unit" => "g/dL",
-                                                       "reference_lower" => 13.0,
-                                                       "reference_upper" => 17.0
-                                                     }
-                                                   )
+                                                {
+                                                  "identifier" => be_present,
+                                                  "name" => "Hemoglobin",
+                                                  "value" => 14.5,
+                                                  "unit" => "g/dL",
+                                                  "reference_lower" => 13.0,
+                                                  "reference_upper" => 17.0
+                                                }
+                                              )
         end
 
         it "creates a new blood check with its entries" do
@@ -212,6 +212,51 @@ RSpec.describe BloodChecksController, type: :controller do
           json_response = JSON.parse(response.body)
           expect(json_response).to have_key("errors")
         end
+      end
+    end
+  end
+
+  describe "POST #load_from_pdf" do
+    before do
+      allow(ExtractorService).to receive(:entries_from_pdf)
+    end
+
+    context "when not logged in" do
+      it "redirects" do
+        # When
+        post :load_from_pdf, params: { pdf_file: "ignored-param" }
+
+        # Then
+        expect(ExtractorService).to have_received(:entries_from_pdf)
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+
+    context "when logged in" do
+      before { sign_in user }
+
+      it "loads the blood check entries through the ExtractorService service" do
+        # Given
+        file_param = Rack::Test::UploadedFile.new(
+          StringIO.new("fake-pdf-content"), "application/pdf", original_filename: "check.pdf"
+        )
+        service_response = [
+          { "name" => "GLOBULI BIANCHI",
+            "value" => 4.23,
+            "unit" => "x10^3/µl",
+            "reference_lower" => 4.0,
+            "reference_upper" => 9.5 }
+        ]
+
+        expect(ExtractorService).to receive(:entries_from_pdf).and_return(service_response)
+
+        # When
+        post :load_from_pdf, params: { pdf_file: file_param }
+
+        # Then
+        expect(json_body).to eq(
+                               { "user_entries" => service_response }
+                             )
       end
     end
   end
