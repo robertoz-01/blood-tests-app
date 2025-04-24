@@ -13,17 +13,13 @@ class BloodChecksController < ApplicationController
   end
 
   def create
-    @blood_check = BloodCheck.new(params.expect(blood_check: [ :check_date, :notes ]))
+    @blood_check = BloodCheck.new(params.expect(blood_check: [:check_date, :notes]))
     @blood_check.user_id = Current.user.id
 
     if @blood_check.save
       user_entries = CheckEntry.insert_user_entries(user_entries_from_params, @blood_check)
-      render json: {
-        blood_check: { identifier: @blood_check.identifier,
-                       check_date: @blood_check.check_date,
-                       notes: @blood_check.notes },
-        user_entries: user_entries
-      }, status: :created
+      render json: ViewModels::BloodCheckWithEntries.new(@blood_check, user_entries),
+             status: :created
     else
       render json: { errors: @blood_check.errors }, status: :unprocessable_entity
     end
@@ -34,12 +30,8 @@ class BloodChecksController < ApplicationController
 
     if @blood_check.update(params.require(:blood_check).permit(:check_date, :notes))
       user_entries = CheckEntry.insert_user_entries(user_entries_from_params, @blood_check)
-      render json: {
-        blood_check: { identifier: @blood_check.identifier,
-                       check_date: @blood_check.check_date,
-                       notes: @blood_check.notes },
-        user_entries: user_entries
-      }, status: :ok
+      render json: ViewModels::BloodCheckWithEntries.new(@blood_check, user_entries),
+             status: :ok
     else
       render json: { errors: @blood_check.errors }, status: :unprocessable_entity
     end
@@ -70,7 +62,9 @@ class BloodChecksController < ApplicationController
   end
 
   def user_entries_from_params
-    params.expect(entries: [ [ :identifier, :name, :value, :unit, :reference_lower, :reference_upper ] ])
+    return [] if params[:entries].blank?
+
+    params.expect(entries: [[:identifier, :name, :value, :unit, :reference_lower, :reference_upper]])
           .map { |entry_data| ViewModels::UserEntry.new(entry_data) }
   end
 end

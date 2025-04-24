@@ -33,6 +33,33 @@ RSpec.describe CheckEntry, type: :model do
         expect(entries.first.value).to eq(4.8)
         expect(entries.first.identifier).to be_present
       end
+
+      it 'returns the blood check user entries' do
+        # Given
+        unit_from_entry = "x10^6/l"
+        user_entry = ViewModels::UserEntry.new(
+          identifier: nil,
+          name: analysis_name,
+          value: 4.8,
+          unit: unit_from_entry,
+          reference_lower: 1,
+          reference_upper: 2
+        )
+
+        # When
+        result = CheckEntry.insert_user_entries([user_entry], blood_check)
+
+        # Then
+        expect(result.size).to eq(1)
+        user_entry = result.first
+        expect(user_entry).to be_a(ViewModels::UserEntry)
+        expect(user_entry.identifier).to be_present
+        expect(user_entry.name).to eq(analysis_name)
+        expect(user_entry.value).to eq(4.8)
+        expect(user_entry.unit).to eq(unit)
+        expect(user_entry.reference_lower).to eq(4)
+        expect(user_entry.reference_upper).to eq(5.5)
+      end
     end
 
     context "when both analysis and check entry exist" do
@@ -88,7 +115,7 @@ RSpec.describe CheckEntry, type: :model do
         )
 
         # When
-        CheckEntry.insert_user_entries([user_entry], blood_check)
+        CheckEntry.insert_user_entries([ user_entry ], blood_check)
         blood_check.reload
 
         # Then

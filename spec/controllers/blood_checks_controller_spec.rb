@@ -108,4 +108,112 @@ RSpec.describe BloodChecksController, type: :controller do
       end
     end
   end
+
+  describe "POST #create" do
+    context "when not logged in" do
+      it "redirects" do
+        # When
+        post :create
+
+        # Then
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+
+    context "when logged in" do
+      before { sign_in user }
+
+      context "with valid parameters" do
+        let(:valid_params) do
+          {
+            blood_check: {
+              check_date: "2024-01-15",
+              notes: "Regular checkup"
+            },
+            entries: [
+              { name: "Hemoglobin", value: 14.5, unit: "g/dL", reference_lower: 13.0, reference_upper: 17.0 }
+            ]
+          }
+        end
+
+        it "returns the created objects as json" do
+          # When
+          post :create, params: valid_params
+
+          # Then
+          expect(response).to have_http_status(:created)
+          json_response = JSON.parse(response.body)
+
+          expect(json_response["blood_check"]).to include(
+                                                    {
+                                                      "notes" => "Regular checkup",
+                                                      "check_date" => "2024-01-15",
+                                                      "identifier" => be_present
+                                                    }
+                                                  )
+          expect(json_response["entries"]).to include(
+                                                     {
+                                                       "identifier" => be_present,
+                                                       "name" => "Hemoglobin",
+                                                       "value" => 14.5,
+                                                       "unit" => "g/dL",
+                                                       "reference_lower" => 13.0,
+                                                       "reference_upper" => 17.0
+                                                     }
+                                                   )
+        end
+
+        it "creates a new blood check with its entries" do
+          # When
+          post :create, params: valid_params
+
+          # Then
+          json_response = JSON.parse(response.body)
+          check_identifier = json_response["blood_check"]["identifier"]
+          created_check = BloodCheck.find_by(identifier: check_identifier)
+
+          expect(created_check.attributes).to include({
+                                                        "identifier" => check_identifier,
+                                                        "notes" => "Regular checkup",
+                                                        "check_date" => Date.new(2024, 1, 15)
+                                                      })
+          expect(created_check.user.id).to eq(user.id)
+          expect(created_check.check_entries.count).to eq(1)
+          created_entry = created_check.check_entries.first
+          expect(created_entry.attributes).to include({
+                                                        "identifier" => be_present,
+                                                        "value" => 14.5
+                                                      })
+          created_analysis = created_entry.analysis
+          expect(created_analysis.attributes).to include({
+                                                           "default_name" => "Hemoglobin",
+                                                           "unit" => "g/dL",
+                                                           "reference_lower" => 13.0,
+                                                           "reference_upper" => 17.0,
+                                                         })
+        end
+      end
+
+      context "with invalid parameters" do
+        let(:invalid_params) do
+          {
+            blood_check: {
+              notes: "Missing required check_date"
+            }
+          }
+        end
+
+        it "returns unprocessable entity status" do
+          # When
+          post :create, params: invalid_params
+
+          # Then
+          expect(response).to have_http_status(:unprocessable_entity)
+          json_response = JSON.parse(response.body)
+          expect(json_response).to have_key("errors")
+        end
+      end
+    end
+  end
+
 end

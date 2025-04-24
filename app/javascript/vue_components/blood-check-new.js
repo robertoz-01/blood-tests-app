@@ -14,7 +14,7 @@ if (element !== null) {
                 // bloodCheck: {identifier: str, check_date: str, notes: str}
                 bloodCheck: bloodCheck,
                 // entries: list[
-                //   {identifier: str, name: str, value: number, unit: str, reference_lower: float, reference_upper: float
+                //   {identifier: str, name: str, value: number, unit: str, reference_lower: number, reference_upper: number
                 //     messages: list[{field: str, level: "info"|"warning", text: str}]
                 //   }
                 // ]
@@ -52,6 +52,7 @@ if (element !== null) {
                         if (response.ok) {
                             response.json().then((user_data) => {
                                 this.bloodCheck = user_data.blood_check;
+                                this.entries = user_data.entries;
                                 const toastLiveExample = document.getElementById('successfulCreationToast')
                                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                                 toastBootstrap.show()
