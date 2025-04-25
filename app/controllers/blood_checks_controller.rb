@@ -8,7 +8,7 @@ class BloodChecksController < ApplicationController
   end
 
   def edit
-    @blood_check = blood_check_by_id
+    @blood_check = blood_check_by_id!
     render :new
   end
 
@@ -26,7 +26,7 @@ class BloodChecksController < ApplicationController
   end
 
   def update
-    @blood_check = blood_check_by_id
+    @blood_check = blood_check_by_id!
 
     if @blood_check.update(params.require(:blood_check).permit(:check_date, :notes))
       user_entries = CheckEntry.insert_user_entries(user_entries_from_params, @blood_check)
@@ -45,8 +45,7 @@ class BloodChecksController < ApplicationController
   end
 
   def compare
-    identifiers = params.require(:identifiers).split(",")
-    @blood_checks = BloodCheck.where(identifier: identifiers).includes(:check_entries)
+    @blood_checks = blood_checks_by_ids!
     analyses_ids = Set.new
     @blood_checks.each do |blood_check|
       blood_check.check_entries.each { |entry| analyses_ids << entry.analysis_id }
@@ -57,8 +56,19 @@ class BloodChecksController < ApplicationController
 
   private
 
-  def blood_check_by_id
+  def blood_check_by_id!
     Current.user.blood_checks.find_by!(identifier: params[:id])
+  end
+
+  def blood_checks_by_ids!
+    identifiers = params.require(:identifiers).split(",")
+    blood_checks = Current.user.blood_checks.where(identifier: identifiers).includes(:check_entries)
+
+    if blood_checks.count != identifiers.count
+      raise ActiveRecord::RecordNotFound
+    end
+
+    blood_checks
   end
 
   def user_entries_from_params

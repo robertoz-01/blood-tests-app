@@ -189,7 +189,7 @@ RSpec.describe BloodChecksController, type: :controller do
                                                            "default_name" => "Hemoglobin",
                                                            "unit" => "g/dL",
                                                            "reference_lower" => 13.0,
-                                                           "reference_upper" => 17.0,
+                                                           "reference_upper" => 17.0
                                                          })
         end
       end
@@ -227,7 +227,7 @@ RSpec.describe BloodChecksController, type: :controller do
         post :load_from_pdf, params: { pdf_file: "ignored-param" }
 
         # Then
-        expect(ExtractorService).to have_received(:entries_from_pdf)
+        expect(ExtractorService).not_to have_received(:entries_from_pdf)
         expect(response).to have_http_status(:redirect)
       end
     end
@@ -261,4 +261,53 @@ RSpec.describe BloodChecksController, type: :controller do
     end
   end
 
+  describe "GET #compare" do
+    let(:blood_check1) { FactoryBot.create(:blood_check, user: user) }
+    let(:blood_check2) { FactoryBot.create(:blood_check, user: user) }
+    let(:analysis) { FactoryBot.create(:analysis) }
+    let(:check_entry1) { FactoryBot.create(:check_entry, blood_check: blood_check1, analysis: analysis) }
+    let(:check_entry2) { FactoryBot.create(:check_entry, blood_check: blood_check2, analysis: analysis) }
+    let(:identifiers_param) { "#{blood_check1.identifier},#{blood_check2.identifier}" }
+
+    context "when not logged in" do
+      it "redirects" do
+        # When
+        get :compare, params: { identifiers: identifiers_param }
+
+        # Then
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+
+    context "when logged in" do
+      before { sign_in user }
+
+      it "shows the comparison of the specified blood checks" do
+        # When
+        get :compare, params: { identifiers: identifiers_param }
+
+        # Then
+        expect(response).to be_successful
+        expect(html_body.at_css('h3').text).to match(/Blood tests comparison/)
+        expect(html_body).to have_selector("table#blood-checks-table")
+      end
+    end
+
+    context "when a blood check does not belong to the logged-in user" do
+      before { sign_in user }
+
+      it "does not allow to compare blood checks from other users" do
+        # Given
+        other_user = FactoryBot.create(:user)
+        other_user_blood_check = FactoryBot.create(:blood_check, user: other_user)
+        identifiers = "#{identifiers_param},#{other_user_blood_check.identifier}"
+
+        # When - Then
+        expect do
+          get :compare, params: { identifiers: identifiers }
+        end.to raise_error(ActiveRecord::RecordNotFound)
+        # TODO: it should be handled in a more graceful way (eg. show a message to the user)
+      end
+    end
+  end
 end
