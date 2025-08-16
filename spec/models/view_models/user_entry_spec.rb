@@ -44,7 +44,7 @@ describe ViewModels::UserEntry do
         value: 5.5,
         analysis: Analysis.new(default_name: "White blood cells",),
       )
-      blood_check = BloodCheck.new(check_entries: [red_cells_entry, white_cells_entry])
+      blood_check = BloodCheck.new(check_entries: [ red_cells_entry, white_cells_entry ])
 
       # When
       view_models = ViewModels::UserEntry.from_blood_check(blood_check)

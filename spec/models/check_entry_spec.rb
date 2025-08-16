@@ -47,7 +47,7 @@ RSpec.describe CheckEntry, type: :model do
         )
 
         # When
-        result = CheckEntry.insert_user_entries([user_entry], blood_check)
+        result = CheckEntry.insert_user_entries([ user_entry ], blood_check)
 
         # Then
         expect(result.size).to eq(1)

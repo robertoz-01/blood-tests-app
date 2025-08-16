@@ -13,7 +13,7 @@ class BloodChecksController < ApplicationController
   end
 
   def create
-    @blood_check = BloodCheck.new(params.expect(blood_check: [:check_date, :notes]))
+    @blood_check = BloodCheck.new(params.expect(blood_check: [ :check_date, :notes ]))
     @blood_check.user_id = Current.user.id
 
     if @blood_check.save
@@ -74,7 +74,7 @@ class BloodChecksController < ApplicationController
   def user_entries_from_params
     return [] if params[:entries].blank?
 
-    params.expect(entries: [[:identifier, :name, :value, :unit, :reference_lower, :reference_upper]])
+    params.expect(entries: [ [ :identifier, :name, :value, :unit, :reference_lower, :reference_upper ] ])
           .map { |entry_data| ViewModels::UserEntry.new(entry_data) }
   end
 end

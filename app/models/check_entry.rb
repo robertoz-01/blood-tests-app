@@ -3,12 +3,11 @@ class CheckEntry < ApplicationRecord
   belongs_to :analysis
 
   class << self
-
     def insert_user_entries(user_entries, blood_check)
       analyses_by_name = get_or_create_analyses(user_entries)
 
       existing_entries = CheckEntry.where(identifier: user_entries.map(&:identifier))
-      existing_entries_by_identifiers = existing_entries.map { |e| [e.identifier, e] }.to_h
+      existing_entries_by_identifiers = existing_entries.map { |e| [ e.identifier, e ] }.to_h
 
       check_entries = user_entries.map do |entry|
         analysis = analyses_by_name[entry.name]
@@ -35,7 +34,7 @@ class CheckEntry < ApplicationRecord
 
     def get_or_create_analyses(user_entries)
       existing_analyses = Analysis.all.to_a
-      analyses_by_name = existing_analyses.map { |a| [a.default_name, a] }.to_h
+      analyses_by_name = existing_analyses.map { |a| [ a.default_name, a ] }.to_h
 
       user_entries.each do |entry|
         unless analyses_by_name.has_key?(entry.name)
