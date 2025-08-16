@@ -208,7 +208,7 @@ RSpec.describe BloodChecksController, type: :controller do
           post :create, params: invalid_params
 
           # Then
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           json_response = JSON.parse(response.body)
           expect(json_response).to have_key("errors")
         end

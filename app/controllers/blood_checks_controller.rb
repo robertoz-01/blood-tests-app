@@ -21,7 +21,7 @@ class BloodChecksController < ApplicationController
       render json: ViewModels::BloodCheckWithEntries.new(@blood_check, user_entries),
              status: :created
     else
-      render json: { errors: @blood_check.errors }, status: :unprocessable_entity
+      render json: { errors: @blood_check.errors }, status: :unprocessable_content
     end
   end
 
@@ -33,7 +33,7 @@ class BloodChecksController < ApplicationController
       render json: ViewModels::BloodCheckWithEntries.new(@blood_check, user_entries),
              status: :ok
     else
-      render json: { errors: @blood_check.errors }, status: :unprocessable_entity
+      render json: { errors: @blood_check.errors }, status: :unprocessable_content
     end
   end
 
