@@ -40,7 +40,7 @@ gem "dartsass-rails"
 gem "bootstrap", "~> 5.3.5"
 
 # Use it to make http requests to other services
-gem "httparty", "~> 0.23.1"
+gem "httparty", "~> 0.23.2"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
