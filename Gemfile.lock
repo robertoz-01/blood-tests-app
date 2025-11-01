@@ -144,7 +144,7 @@ GEM
     google-protobuf (4.32.0-x86_64-linux-musl)
       bigdecimal
       rake (>= 13)
-    httparty (0.23.1)
+    httparty (0.23.2)
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -440,7 +440,7 @@ DEPENDENCIES
   factory_bot (~> 6.5)
   factory_bot_rails (~> 6.5)
   foreman
-  httparty (~> 0.23.1)
+  httparty (~> 0.23.2)
   importmap-rails
   jbuilder
   kamal
